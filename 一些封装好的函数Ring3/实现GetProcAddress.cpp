@@ -1,7 +1,7 @@
 #include<iostream>
 #include<Windows.h>
 #include<tchar.h>
-#define path L"C:\\Users\\ÂŞ¼­\\Desktop\\Dll1.dll"
+#define path L"C:\\Users\\ç½—è¾‘\\Desktop\\Dll1.dll"
 
 VOID EnumExport(DWORD buf);
 DWORD RVA2FOA(DWORD buf, DWORD RVA);
@@ -35,12 +35,12 @@ VOID EnumExport(DWORD buf) {
 	DWORD export_table_RVA = option_header->DataDirectory[0].VirtualAddress;
 	PIMAGE_EXPORT_DIRECTORY export_table = PIMAGE_EXPORT_DIRECTORY(RVA2FOA((DWORD)buf, export_table_RVA) + (DWORD)buf);
 
-	printf("***º¯ÊıµØÖ·±í***\n");
+	printf("***å‡½æ•°åœ°å€è¡¨***\n");
 	DWORD FunAddressTable = RVA2FOA((DWORD)buf, export_table->AddressOfFunctions) + (DWORD)buf;
 	for (int i = 0; i < export_table->NumberOfFunctions; i++) {
 		printf("%08X\n", ((PDWORD)FunAddressTable)[i]);
 	}
-	printf("***º¯ÊıÃû³Æ±í***\n");
+	printf("***å‡½æ•°åç§°è¡¨***\n");
 	DWORD FunNameTableRVA = RVA2FOA((DWORD)buf, export_table->AddressOfNames) + (DWORD)buf;
 	DWORD FunNameTable = 0;
 	for (int i = 0; i < export_table->NumberOfNames; i++) {
@@ -48,7 +48,7 @@ VOID EnumExport(DWORD buf) {
 		printf("%s\n", (PCHAR)FunNameTable);
 		FunNameTableRVA += 4;
 	}
-	printf("***º¯ÊıĞòºÅ±í***\n");
+	printf("***å‡½æ•°åºå·è¡¨***\n");
 	DWORD FunNameOrdinal = RVA2FOA((DWORD)buf, export_table->AddressOfNameOrdinals) + (DWORD)buf;
 	DWORD base = export_table->Base;
 	for (int i = 0; i < export_table->NumberOfNames; i++) {
@@ -74,9 +74,9 @@ DWORD GetProcAddressByName(DWORD buf, PCHAR name) {
 		FunName = RVA2FOA((DWORD)buf, *(PDWORD)FunNameTableRVA)+(DWORD)buf;
 		FunNameTableRVA += 4;
 		if (strcmp(name, (PCHAR)FunName) == 0) {
-			//ÓÃÕâ¸öÏÂ±êÈ¥ÕÒĞòºÅ±í
+			//ç”¨è¿™ä¸ªä¸‹æ ‡å»æ‰¾åºå·è¡¨
 			val = ((PDWORD)FunOridinalsTable)[i];
-			//ÓÃvalÈ¥ÕÒº¯ÊıµØÖ·±íÀïÕÒµØÖ·
+			//ç”¨valå»æ‰¾å‡½æ•°åœ°å€è¡¨é‡Œæ‰¾åœ°å€
 			return ((PDWORD)FunAddressTable)[val];
 		}
 	}
@@ -105,7 +105,7 @@ DWORD GetProcAddressByOridinal(DWORD buf, DWORD order) {
 }
 
 
-int _tmain(char* argv, char* args[]) {
+int _tmain(char argc, char* argv[]) {
 	HANDLE hFile = CreateFile(path, GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	DWORD size = GetFileSize(hFile, NULL);
 	LPVOID buf = new char[size] {0};
