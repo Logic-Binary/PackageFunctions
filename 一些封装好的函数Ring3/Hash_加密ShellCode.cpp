@@ -11,14 +11,14 @@ DWORD fun_hash(PCHAR funName) {
 	}
 	return nDigest;
 }
-//¼ÆËãHash
+//è®¡ç®—Hash
 VOID fun1() {
 	CHAR name[] = "ExitProcess";
 	int a = fun_hash(name);
 	printf("%x", a);
 	system("pause");
 }
-//¼ÓÃÜ
+//åŠ å¯†
 bool Encoder() {
 	CHAR Shellcode[] = "\x55\x8B\xEC\x83\xEC\x30\xEB\x1B\x63\x89\xD1\x4F\x6A\x0A\x38\x1E\x55\x73\x65\x72\x33\x32\x2E\x64\x6C\x6C\x00\x87\x32\xD8\xC0\x85\xDF\xAF\xBB\xE8\x00\x00\x00\x00\x5A\x89\x55\xFC\x64\x8B\x35\x30\x00\x00\x00\x8B\x76\x0C\x8B\x76\x1C\x8B\x36\x8B\x36\x8B\x5E\x08\x89\x5D\xF8\x8B\x45\xFC\x8D\x40\xF7\x50\xFF\x75\xF8\xE8\x50\x00\x00\x00\x89\x55\xF4\x8B\x45\xFC\x8D\x40\xF3\x50\xFF\x75\xF8\xE8\x3E\x00\x00\x00\x89\x55\xF0\x33\xF6\x56\x56\x8B\x45\xFC\x8D\x40\xE8\x50\xFF\xD2\x8B\x5D\xFC\x8D\x5B\xE4\x53\x50\xE8\x21\x00\x00\x00\x89\x55\xEC\x33\xF6\x56\x56\x56\x56\xFF\xD2\x8B\x45\xFC\x8D\x40\xE0\x8B\x5D\xF8\x50\x53\xE8\x06\x00\x00\x00\x56\xFF\xD2\x8B\xE5\x5D\x55\x8B\xEC\x83\xEC\x10\x8B\x45\x08\x8B\x70\x3C\x8D\x34\x30\x8B\x76\x78\x8D\x34\x06\x8B\x4E\x1C\x8D\x0C\x01\x89\x4D\xFC\x8B\x56\x20\x8D\x14\x02\x89\x55\xF8\x8B\x5E\x24\x8D\x1C\x03\x89\x5D\xF4\x33\xC9\xEB\x01\x41\x8B\x75\xF8\x8B\x34\x8E\x8D\x34\x06\xFF\x75\x0C\x56\xE8\x20\x00\x00\x00\x85\xDB\x75\xE9\x8B\x5D\xF4\x33\xC0\x3E\x66\x8B\x04\x4B\x8B\x5D\xFC\x8B\x14\x83\x8B\x5D\x08\x8D\x14\x1A\x8B\xE5\x5D\xC2\x08\x00\x55\x8B\xEC\x83\xEC\x10\xC7\x45\xFC\x00\x00\x00\x00\x8B\x75\x08\x51\x50\x33\xC9\x33\xC0\x8A\x04\x0E\x84\xC0\x74\x16\x8B\x5D\xFC\xC1\xE3\x19\x8B\x55\xFC\xC1\xEA\x07\x0B\xDA\x03\xD8\x89\x5D\xFC\x41\xEB\xE3\x8B\x5D\x0C\x8B\x1B\x8B\x55\xFC\x33\xC0\x2B\xDA\x58\x59\x8B\xE5\x5D\xC2\x08\x00";
 
@@ -49,20 +49,20 @@ bool Encoder() {
 	system("pause");
 }
 
-int _tmain(char* argv, char* args[]) {
+int _tmain(char argc, char* argv[]) {
 	//fun1();
 	Encoder();
 
 
-	//ps:½İ¾¶¿É²»ÊÊºÏÅÊµÇÕß
-	//ÔİÇÒ·ÅÆúC±àĞ´Shellcode
+	//ps:æ·å¾„å¯ä¸é€‚åˆæ”€ç™»è€…
+	//æš‚ä¸”æ”¾å¼ƒCç¼–å†™Shellcode
 
 	//*****************************************************************************************************************
-	//º¯Êıfun_findFunAddress ²éÕÒº¯ÊıµØÖ·			²ÎÊı1:Ä£¿é»ùÖ·					²ÎÊı2:º¯ÊıÃûhashÕªÒª ·µ»ØÖµedxÊÇº¯ÊıµØÖ·
-	//º¯Êıfun_Hash_CmpString ¸ù¾İhasn²éÕÒ×Ö·û´®	²ÎÊı1:Ä£¿é»ùÖ·ÖĞ±éÀúµ½µÄ×Ö·û´®µØÖ·	²ÎÊı2:ÕªÒª
+	//å‡½æ•°fun_findFunAddress æŸ¥æ‰¾å‡½æ•°åœ°å€			å‚æ•°1:æ¨¡å—åŸºå€					å‚æ•°2:å‡½æ•°åhashæ‘˜è¦ è¿”å›å€¼edxæ˜¯å‡½æ•°åœ°å€
+	//å‡½æ•°fun_Hash_CmpString æ ¹æ®hasnæŸ¥æ‰¾å­—ç¬¦ä¸²	å‚æ•°1:æ¨¡å—åŸºå€ä¸­éå†åˆ°çš„å­—ç¬¦ä¸²åœ°å€	å‚æ•°2:æ‘˜è¦
 	//*****************************************************************************************************************
 
-	//½âÃÜShellcode(shellcode·ÅÔÚjmp esp ºó)
+	//è§£å¯†Shellcode(shellcodeæ”¾åœ¨jmp esp å)
 	//"\x33\xC0\xE8\xFF\xFF\xFF\xFF\xC3\x58\x8D\x70\x1B\x33\xC9\x66\xB9\x6D\x01\x8A\x04\x0E\x34\x05\x88\x04\x0E\xE2\xF6\x80\x34\x0E\x05\xFF\xE6"
 	__asm {
 		mov eax, eax;
@@ -92,7 +92,7 @@ int _tmain(char* argv, char* args[]) {
 	
 
 
-	//Ô´ShellCode(shellcode·ÅÔÚ½âÃÜshellcodeºó)
+	//æºShellCode(shellcodeæ”¾åœ¨è§£å¯†shellcodeå)
 	__asm {
 
 		mov eax, eax;
@@ -100,56 +100,56 @@ int _tmain(char* argv, char* args[]) {
 		mov eax, eax;
 
 
-		//²»ĞèÒª±£´æ»·¾³£¿
+		//ä¸éœ€è¦ä¿å­˜ç¯å¢ƒï¼Ÿ
 		push ebp;
 		mov ebp, esp;
 		sub esp, 0x30;
 		jmp tag_Section1;
 
-		//ÕªÒª4fd18963 ExitProcess local1-0x20
+		//æ‘˜è¦4fd18963 ExitProcess local1-0x20
 		_asm _emit(0x63) _asm _emit(0x89) _asm _emit(0xd1) _asm _emit(0x4f);
-		//ÕªÒª1e380a6a MessageBoxA  local1-0x1c
+		//æ‘˜è¦1e380a6a MessageBoxA  local1-0x1c
 		_asm _emit(0x6a) _asm _emit(0x0a) _asm _emit(0x38) _asm _emit(0x1e);
 
-		//"User32.dll\0" Ò²¿ÉÒÔÇ¿ĞĞhash£¬Èç¹ûdllºÜ¶àµÄ»°£¬ĞèÒª±éÀúÁ´±íÈ¥ÕÒÕâ¸ödllÁË
+		//"User32.dll\0" ä¹Ÿå¯ä»¥å¼ºè¡Œhashï¼Œå¦‚æœdllå¾ˆå¤šçš„è¯ï¼Œéœ€è¦éå†é“¾è¡¨å»æ‰¾è¿™ä¸ªdlläº†
 		//local1-0x18
 		_asm _emit(0x55) _asm _emit(0x73) _asm _emit(0x65) _asm _emit(0x72) _asm _emit(0x33)
 		_asm _emit(0x32) _asm _emit(0x2E) _asm _emit(0x64) _asm _emit(0x6c) _asm _emit(0x6c)
 		_asm _emit(0x00)
 
-		//ÕªÒªc0d83287 LoadLibrary local1-0xd
+		//æ‘˜è¦c0d83287 LoadLibrary local1-0xd
 		_asm _emit(0x87) _asm _emit(0x32) _asm _emit(0xd8) _asm _emit(0xc0);
-		//ÕªÒªbbafdf85 GetProcAddress local1-0x9
+		//æ‘˜è¦bbafdf85 GetProcAddress local1-0x9
 		_asm _emit(0x85) _asm _emit(0xdf) _asm _emit(0xaf) _asm _emit(0xbb);
 
 	tag_Section1:
 		call tag_Section2;
 	tag_Section2:
-		//edxÊÇtag_Section2£¬ÓÃÀ´¼ÆËãÆ«ÒÆ
+		//edxæ˜¯tag_Section2ï¼Œç”¨æ¥è®¡ç®—åç§»
 		pop edx;
 		mov[ebp - 0x4], edx;			//local1 = offset
-		//È¥ÄÃkernel32.dllµÄ»ùÖ·
+		//å»æ‹¿kernel32.dllçš„åŸºå€
 		mov esi, dword ptr fs : [0x30] ;
 		mov esi, [esi + 0xc];
 		mov esi, [esi + 0x1c];
 		mov esi, [esi];
 		mov esi, [esi];
-		//ebxÊÇKernel32.dllµÄ»ùÖ·
+		//ebxæ˜¯Kernel32.dllçš„åŸºå€
 		mov ebx, [esi + 0x8];
-		mov[ebp - 0x8], ebx;		//local2 = Kernel32.dll»ùÖ·
-		//Ñ°ÕÒGetProcAddressµØÖ·
+		mov[ebp - 0x8], ebx;		//local2 = Kernel32.dllåŸºå€
+		//å¯»æ‰¾GetProcAddressåœ°å€
 		mov eax, [ebp - 0x4];
 		lea eax, [eax - 0x9];
-		push eax;					//GetProcAddressÕªÒª
-		push[ebp - 0x8];			//Kernel32.dll»ùÖ·
-		//ÄÃGetProcAddress µÄµØÖ· edxÊÇº¯ÊıµØÖ·
+		push eax;					//GetProcAddressæ‘˜è¦
+		push[ebp - 0x8];			//Kernel32.dllåŸºå€
+		//æ‹¿GetProcAddress çš„åœ°å€ edxæ˜¯å‡½æ•°åœ°å€
 		call fun_findFunAddress;
 		mov[ebp - 0xc], edx;		//local3 = GetProcAddress
 		mov eax, [ebp - 0x4];
 		lea eax, [eax - 0xd];
 		push eax;
 		push[ebp - 0x8];
-		//ÄÃLoadLibraryExA µÄµØÖ· edxÊÇº¯ÊıµØÖ·
+		//æ‹¿LoadLibraryExA çš„åœ°å€ edxæ˜¯å‡½æ•°åœ°å€
 		call fun_findFunAddress;
 		mov[ebp - 0x10], edx;		//local4 = LoadLibraryExA
 		xor esi, esi;
@@ -158,7 +158,7 @@ int _tmain(char* argv, char* args[]) {
 		mov eax, [ebp - 0x4];
 		lea eax, [eax - 0x18];
 		push eax;
-		call edx;					//eax = user32.dllµÄ»ùÖ·
+		call edx;					//eax = user32.dllçš„åŸºå€
 		mov ebx, [ebp - 0x4];
 		lea ebx, [ebx - 0x1c];
 		push ebx;
@@ -166,7 +166,7 @@ int _tmain(char* argv, char* args[]) {
 		call fun_findFunAddress;
 		mov[ebp - 0x14], edx;		//local5 = MessageBoxA;
 		//****************************************
-		//ÌáÎÊ£º×Ö·û´®ÈçºÎÊİÉí£¿
+		//æé—®ï¼šå­—ç¬¦ä¸²å¦‚ä½•ç˜¦èº«ï¼Ÿ
 		xor esi, esi;
 		push esi;
 		push esi;
@@ -179,52 +179,52 @@ int _tmain(char* argv, char* args[]) {
 		mov ebx, [ebp - 0x8];
 		push eax;
 		push ebx;
-		call fun_findFunAddress;	//ÕÒExitProcessµØÖ·
+		call fun_findFunAddress;	//æ‰¾ExitProcessåœ°å€
 		push esi;
 		call edx;
 
 		mov esp, ebp;
 		pop ebp;
 
-	fun_findFunAddress:			//·µ»ØÖµÊÇEDX
-		//¿ª±ÙÕ»Ö¡,±£´æ»·¾³
+	fun_findFunAddress:			//è¿”å›å€¼æ˜¯EDX
+		//å¼€è¾Ÿæ ˆå¸§,ä¿å­˜ç¯å¢ƒ
 		push ebp;
 		mov ebp, esp;
 		sub esp, 0x10;
-		//ÏÈÄÃÈıÕÅ±íµØÖ·
-		mov eax, [ebp + 0x8];	//eax = »ùÖ·
+		//å…ˆæ‹¿ä¸‰å¼ è¡¨åœ°å€
+		mov eax, [ebp + 0x8];	//eax = åŸºå€
 		mov esi, [eax + 0x3c];
-		lea esi, [eax + esi];	//esi = peÍ·
+		lea esi, [eax + esi];	//esi = peå¤´
 		mov esi, [esi + 0x78];
 		lea esi, [esi + eax];	//esi = export_table
 		mov ecx, [esi + 0x1c];
 		lea ecx, [ecx + eax];	//ecx = EAT
-		mov[ebp - 0x4], ecx;	//[ebp-0x4]==>º¯ÊıµØÖ·±í
+		mov[ebp - 0x4], ecx;	//[ebp-0x4]==>å‡½æ•°åœ°å€è¡¨
 		mov edx, [esi + 0x20];
 		lea edx, [edx + eax];	//edx = ENT
-		mov[ebp - 0x8], edx;	//[ebp-0x8]==>º¯ÊıÃû³Æ±í
+		mov[ebp - 0x8], edx;	//[ebp-0x8]==>å‡½æ•°åç§°è¡¨
 		mov ebx, [esi + 0x24];
 		lea ebx, [ebx + eax];	//ebx = EOT
-		mov[ebp - 0xc], ebx;	//[ebp-0xC]==>º¯ÊıĞòºÅ±í
+		mov[ebp - 0xc], ebx;	//[ebp-0xC]==>å‡½æ•°åºå·è¡¨
 
 		xor ecx, ecx;
 		jmp tag_FirstCmp;
 	tag_CmpFunNameLoop:
 		inc ecx;
 	tag_FirstCmp:
-		mov esi, [ebp - 0x8];			//esi = º¯ÊıÃû³Æ±í
+		mov esi, [ebp - 0x8];			//esi = å‡½æ•°åç§°è¡¨
 		mov esi, [esi + 0x4 * ecx];
-		lea esi, [esi + eax];			//esi = º¯ÊıÃû³Æ×Ö·û´®µØÖ·
-		push[ebp + 0xc];				//ÕªÒª
-		push esi;						//×Ö·û´®µØÖ·
+		lea esi, [esi + eax];			//esi = å‡½æ•°åç§°å­—ç¬¦ä¸²åœ°å€
+		push[ebp + 0xc];				//æ‘˜è¦
+		push esi;						//å­—ç¬¦ä¸²åœ°å€
 		call fun_Hash_CmpString;
-		test ebx, ebx;					//ÅĞ¶Ï·µ»ØÖµÊÇ·ñÎª0(0ÎªÕÒµ½,1ÎªÃ»ÕÒµ½) ·µ»ØÖµÊÇebx
+		test ebx, ebx;					//åˆ¤æ–­è¿”å›å€¼æ˜¯å¦ä¸º0(0ä¸ºæ‰¾åˆ°,1ä¸ºæ²¡æ‰¾åˆ°) è¿”å›å€¼æ˜¯ebx
 		jne tag_CmpFunNameLoop;
-		//´ËÊ±ecx¾ÍÊÇÏÂ±ê£¬ÄÃ×ÅÕâ¸öÏÂ±êÈ¥ĞòºÅ±íÀïÕÒ
+		//æ­¤æ—¶ecxå°±æ˜¯ä¸‹æ ‡ï¼Œæ‹¿ç€è¿™ä¸ªä¸‹æ ‡å»åºå·è¡¨é‡Œæ‰¾
 		mov ebx, [ebp - 0xc];
 		xor eax, eax;
 		mov ax, word ptr ds : [ebx + 0x2 * ecx] ;
-		//ax¾ÍÊÇº¯ÊıµØÖ·±íÀï¶ÔÓ¦º¯ÊıµÄÏÂ±ê edx×îÖÕÇóµÃº¯ÊıµØÖ·
+		//axå°±æ˜¯å‡½æ•°åœ°å€è¡¨é‡Œå¯¹åº”å‡½æ•°çš„ä¸‹æ ‡ edxæœ€ç»ˆæ±‚å¾—å‡½æ•°åœ°å€
 		mov ebx, [ebp - 0x4];
 		mov edx, [ebx + 0x4 * eax];
 		mov ebx, [ebp + 0x8];
@@ -234,19 +234,19 @@ int _tmain(char* argv, char* args[]) {
 		pop ebp;
 		ret 0x8;
 
-	fun_Hash_CmpString:		//(char* name,char nDigest)		´ÓENT±íÖĞ´«À´µÄname£¬´ÓÍâ²¿´«À´µÄÕªÒª
+	fun_Hash_CmpString:		//(char* name,char nDigest)		ä»ENTè¡¨ä¸­ä¼ æ¥çš„nameï¼Œä»å¤–éƒ¨ä¼ æ¥çš„æ‘˜è¦
 		push ebp;
 		mov ebp, esp;
 		sub esp, 0x10;
 		mov dword ptr[ebp - 0x4], 0;
-		mov esi, [ebp + 0x8];		//esi = ×Ö·û´®µØÖ·
+		mov esi, [ebp + 0x8];		//esi = å­—ç¬¦ä¸²åœ°å€
 		push ecx;
 		push eax;
 		xor ecx, ecx;
 		xor eax, eax;
 	tag_HashLoop:
 		mov al, [esi + ecx];
-		test al, al;				//Èç¹ûÎª0£¬ËµÃ÷×Ö·û´®µ½ÁË½áÎ²£¬½áÊøÑ­»·
+		test al, al;				//å¦‚æœä¸º0ï¼Œè¯´æ˜å­—ç¬¦ä¸²åˆ°äº†ç»“å°¾ï¼Œç»“æŸå¾ªç¯
 		je tag_HashEnd;
 		mov ebx, [ebp - 0x4];
 		shl ebx, 0x19;
@@ -259,8 +259,8 @@ int _tmain(char* argv, char* args[]) {
 		jmp tag_HashLoop;
 	tag_HashEnd:
 		mov ebx, [ebp + 0xc];
-		mov ebx, [ebx];				//ebx = ÕªÒª(param2)
-		mov edx, [ebp - 0x4];		//edx = ÕªÒª(local)
+		mov ebx, [ebx];				//ebx = æ‘˜è¦(param2)
+		mov edx, [ebp - 0x4];		//edx = æ‘˜è¦(local)
 		xor eax, eax;
 		sub ebx, edx;
 		pop eax;
