@@ -17,7 +17,7 @@ VOID PrintProcessNameAndID(DWORD id) {
 	if (hProcess!=NULL) {
 		HMODULE hMod;
 		DWORD cbNeeded;
-		//Ã¶¾ÙÄ£¿é
+		//æšä¸¾æ¨¡å—
 		if (EnumProcessModules(hProcess, &hMod, sizeof(hMod),
 			&cbNeeded))
 		{
@@ -34,18 +34,18 @@ VOID PrintProcessNameAndID(DWORD id) {
 }
 
 
-int _tmain(char* argv, char* args[]) {
+int _tmain(char argc, char* argv[]) {
 
-	//·Ö±ğÊÇ´æ·ÅidµÄÊı×é£¬Êµ¼Ê´æ·ÅÁË¶àÉÙ×Ö½Ú£¬ÒÔ¼°µÈ»áÒªÇóµÄ½ø³Ì¸öÊı
+	//åˆ†åˆ«æ˜¯å­˜æ”¾idçš„æ•°ç»„ï¼Œå®é™…å­˜æ”¾äº†å¤šå°‘å­—èŠ‚ï¼Œä»¥åŠç­‰ä¼šè¦æ±‚çš„è¿›ç¨‹ä¸ªæ•°
 	DWORD pPid[1024], cbNeeded, cProcesses;
-	//Ã¶¾Ù½ø³Ì£¬´æ·Å½øpPidÖĞ
+	//æšä¸¾è¿›ç¨‹ï¼Œå­˜æ”¾è¿›pPidä¸­
 	if (!EnumProcesses(pPid, sizeof(pPid), &cbNeeded)) {
-		//Ê§°ÜÁËÔòÍË³ö
+		//å¤±è´¥äº†åˆ™é€€å‡º
 		return -1;
 	}
-	//¼ÆËãÓĞ¶àÉÙ½ø³Ì
+	//è®¡ç®—æœ‰å¤šå°‘è¿›ç¨‹
 	cProcesses = cbNeeded / 4;
-	//Ñ­»·±éÀú
+	//å¾ªç¯éå†
 	for (int i = 0; i < cProcesses; i++) {
 		if (pPid[i] != 0) {
 			PrintProcessNameAndID(pPid[i]);
