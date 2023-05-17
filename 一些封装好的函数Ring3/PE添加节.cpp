@@ -2,12 +2,12 @@
 #include<tchar.h>
 #include<iostream>
 #include <locale.h>
-#define path1 L"C:\\Users\\ÂŞ¼­\\Desktop\\Test.exe"
-#define path2 L"C:\\Users\\ÂŞ¼­\\Desktop\\111.exe"
+#define path1 L"C:\\Users\\ç½—è¾‘\\Desktop\\Test.exe"
+#define path2 L"C:\\Users\\ç½—è¾‘\\Desktop\\111.exe"
 
-//À©´ó×îºóÒ»¸ö½Ú
+//æ‰©å¤§æœ€åä¸€ä¸ªèŠ‚
 DWORD AddSection2(LPVOID buf, DWORD size, HANDLE hFile, PCHAR section_name, DWORD section_size);
-//ÒÆ³ıdos_stub,Õû¸öÍ·²¿Ç°ÒÆ,Ìí¼ÓÒ»¸ö½Ú
+//ç§»é™¤dos_stub,æ•´ä¸ªå¤´éƒ¨å‰ç§»,æ·»åŠ ä¸€ä¸ªèŠ‚
 DWORD AddSection(PCHAR section_name, DWORD section_size);
 
 DWORD AddSection(PCHAR section_name, DWORD section_size) {
@@ -15,7 +15,7 @@ DWORD AddSection(PCHAR section_name, DWORD section_size) {
 	HANDLE hFile2 = CreateFile(path2, GENERIC_READ | GENERIC_WRITE, NULL, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (((DWORD)hFile == INVALID_FILE_ATTRIBUTES) || ((DWORD)hFile2 == INVALID_FILE_ATTRIBUTES)) {
-		printf("ÎÄ¼ş´ò¿ªÊ§°Ü");
+		printf("æ–‡ä»¶æ‰“å¼€å¤±è´¥");
 		return 0;
 	}
 	DWORD size = GetFileSize(hFile, NULL);
@@ -23,21 +23,21 @@ DWORD AddSection(PCHAR section_name, DWORD section_size) {
 	DWORD readSize = 0;
 	DWORD err_t = ReadFile(hFile, buf, size, &readSize, NULL);
 	if (!err_t) {
-		printf("¶ÁÈ¡ÎÄ¼şÊ§°Ü");
+		printf("è¯»å–æ–‡ä»¶å¤±è´¥");
 		CloseHandle(hFile);
 		CloseHandle(hFile2);
 		return 0;
 	}
-	//ÀÏ¹æ¾Ø
+	//è€è§„çŸ©
 	PIMAGE_DOS_HEADER dos_header = PIMAGE_DOS_HEADER(buf);
 	PIMAGE_NT_HEADERS nt_header = PIMAGE_NT_HEADERS((DWORD)buf + dos_header->e_lfanew);
 	PIMAGE_FILE_HEADER file_header = PIMAGE_FILE_HEADER(&(nt_header->FileHeader));
 	PIMAGE_OPTIONAL_HEADER optional_header = PIMAGE_OPTIONAL_HEADER(&(nt_header->OptionalHeader));
 	PIMAGE_SECTION_HEADER section_header = PIMAGE_SECTION_HEADER(IMAGE_FIRST_SECTION(nt_header));
 
-	//Ìí¼Ó½ÚµÄµÚÒ»²½£¬ÏÈ½«NTÍ·²¿+Çø¶Î±íÈ«²¿Ç°ÒÆ
+	//æ·»åŠ èŠ‚çš„ç¬¬ä¸€æ­¥ï¼Œå…ˆå°†NTå¤´éƒ¨+åŒºæ®µè¡¨å…¨éƒ¨å‰ç§»
 	DWORD dos_size = sizeof(IMAGE_DOS_HEADER);
-	//1.¼ÇÂ¼Ò»ÏÂdos_subµÄ´óĞ¡
+	//1.è®°å½•ä¸€ä¸‹dos_subçš„å¤§å°
 	DWORD dos_sub_size = dos_header->e_lfanew - dos_size;
 	if (dos_sub_size > 40) {
 		DWORD val = AddSection2(buf, size, hFile2, section_name, section_size);
@@ -49,50 +49,50 @@ DWORD AddSection(PCHAR section_name, DWORD section_size) {
 		CloseHandle(hFile2);
 		return val;
 	}
-	//2.PE±êÖ¾¿ªÊ¼ÍùºóµÄ´óĞ¡--Ò»Ö±µ½Çø¶ÎĞÅÏ¢½áÊø
-	//NTµÄ´óĞ¡+Çø¶Î±í´óĞ¡
+	//2.PEæ ‡å¿—å¼€å§‹å¾€åçš„å¤§å°--ä¸€ç›´åˆ°åŒºæ®µä¿¡æ¯ç»“æŸ
+	//NTçš„å¤§å°+åŒºæ®µè¡¨å¤§å°
 	DWORD all_size = sizeof(IMAGE_NT_HEADERS) + (file_header->NumberOfSections) * 40;
-	//ÕûÌåÇ°ÒÆ
+	//æ•´ä½“å‰ç§»
 	memcpy(LPVOID((DWORD)buf + dos_size), nt_header, all_size);
-	//½«e_lfanewĞŞ¸Ä
+	//å°†e_lfanewä¿®æ”¹
 	dos_header->e_lfanew = dos_size;
-	//½«ÖĞ¼äµÄÆ«ÒÆ²¿·Ö²¹0
+	//å°†ä¸­é—´çš„åç§»éƒ¨åˆ†è¡¥0
 	memset(LPVOID((DWORD)buf + all_size + dos_size), 0, dos_sub_size);
 
-	//ÖØĞÂ»ñÈ¡¸÷¸ö½ÚµãĞÅÏ¢
+	//é‡æ–°è·å–å„ä¸ªèŠ‚ç‚¹ä¿¡æ¯
 	nt_header = PIMAGE_NT_HEADERS((DWORD)buf + dos_header->e_lfanew);
 	file_header = PIMAGE_FILE_HEADER(&(nt_header->FileHeader));
 	optional_header = PIMAGE_OPTIONAL_HEADER(&(nt_header->OptionalHeader));
 	section_header = PIMAGE_SECTION_HEADER(IMAGE_FIRST_SECTION(nt_header));
 
-	//×¼±¸¹¤×÷Íê³Éºó×¼±¸Ìí¼Ó½Ú
+	//å‡†å¤‡å·¥ä½œå®Œæˆåå‡†å¤‡æ·»åŠ èŠ‚
 	IMAGE_SECTION_HEADER sh = { 0 };
-	//Ãû×Ö(¿ÉÓÃsection_name¶¯Ì¬ÉèÖÃ)
+	//åå­—(å¯ç”¨section_nameåŠ¨æ€è®¾ç½®)
 	char name[8] = "123";
 	memcpy(sh.Name, name, 8);
-	//Çø¶Î´óĞ¡
+	//åŒºæ®µå¤§å°
 	sh.Misc.VirtualSize = section_size;
-	//Çø¶ÎRVA
-	//×îºóÒ»¸öÇø¶ÎµÄRVA+×îºóÒ»¸öÇø¶ÎµÄ´óĞ¡£¬ÔÙ¶ÔÆë
+	//åŒºæ®µRVA
+	//æœ€åä¸€ä¸ªåŒºæ®µçš„RVA+æœ€åä¸€ä¸ªåŒºæ®µçš„å¤§å°ï¼Œå†å¯¹é½
 	PIMAGE_SECTION_HEADER temp = section_header + file_header->NumberOfSections - 1;
 	DWORD bigger = temp->Misc.VirtualSize > temp->SizeOfRawData ? temp->Misc.VirtualSize : temp->SizeOfRawData;
 	sh.VirtualAddress = (temp->VirtualAddress + bigger + 0x1000) & 0xFFFFF000;
-	//Çø¶ÎÔÚÎÄ¼şÖĞ´óĞ¡
+	//åŒºæ®µåœ¨æ–‡ä»¶ä¸­å¤§å°
 	sh.SizeOfRawData = section_size;
-	//Çø¶ÎµÄÎÄ¼şÆ«ÒÆ
+	//åŒºæ®µçš„æ–‡ä»¶åç§»
 	sh.PointerToRawData = size;
-	//Çø¶ÎÊôĞÔ
+	//åŒºæ®µå±æ€§
 	sh.Characteristics = (section_header + 1)->Characteristics;
-	//Ğ´Èë
+	//å†™å…¥
 	memcpy(LPVOID((DWORD)buf + dos_size + all_size), &sh, 40);
-	//Çø¶ÎÊıÁ¿+1
+	//åŒºæ®µæ•°é‡+1
 	file_header->NumberOfSections += 1;
 	//sizeofimage+0x1000
 	optional_header->SizeOfImage += 0x1000;
 	DWORD writeSize = 0;
 	WriteFile(hFile2, buf, size, &writeSize, NULL);
 	err_t = GetLastError();
-	//ÉèÖÃÆ«ÒÆÎªÎÄ¼şÄ©Î²
+	//è®¾ç½®åç§»ä¸ºæ–‡ä»¶æœ«å°¾
 	OVERLAPPED overlapped = { 0 };
 	overlapped.Offset = size;
 	char tempBuf[0x1000] = { 0 };
@@ -114,18 +114,18 @@ DWORD AddSection2(LPVOID buf, DWORD size, HANDLE hFile, PCHAR section_name, DWOR
 	PIMAGE_OPTIONAL_HEADER optional_header = PIMAGE_OPTIONAL_HEADER(&(nt_header->OptionalHeader));
 	PIMAGE_SECTION_HEADER section_header = PIMAGE_SECTION_HEADER(IMAGE_FIRST_SECTION(nt_header));
 
-	//Ë¼¿¼¼¸¸öÎÊÌâ
-	//1.ÔÚ×îºóµÄÎ»ÖÃÀ©´ó½ÚĞèÒª¸ÄÄÄĞ©ĞÅÏ¢£¿
-	//a.×îºóÒ»¸öÇø¶ÎµÄ´óĞ¡(ÔÚÎÄ¼şÖĞºÍÔÚÄÚ´æÖĞ)
+	//æ€è€ƒå‡ ä¸ªé—®é¢˜
+	//1.åœ¨æœ€åçš„ä½ç½®æ‰©å¤§èŠ‚éœ€è¦æ”¹å“ªäº›ä¿¡æ¯ï¼Ÿ
+	//a.æœ€åä¸€ä¸ªåŒºæ®µçš„å¤§å°(åœ¨æ–‡ä»¶ä¸­å’Œåœ¨å†…å­˜ä¸­)
 	section_header += file_header->NumberOfSections - 1;
-	section_header->Misc.VirtualSize += 0x1000;			//Õâ¸ö´óĞ¡¿ÉÒÔÊÇsection_size
-	section_header->SizeOfRawData += 0x1000;			//Õâ¸ö´óĞ¡¿ÉÒÔÊÇsection_size
-	//b.sizeofimage´óĞ¡
-	optional_header->SizeOfImage += 0x1000;				//Õâ¸ö´óĞ¡¿ÉÒÔÊÇsection_size
+	section_header->Misc.VirtualSize += 0x1000;			//è¿™ä¸ªå¤§å°å¯ä»¥æ˜¯section_size
+	section_header->SizeOfRawData += 0x1000;			//è¿™ä¸ªå¤§å°å¯ä»¥æ˜¯section_size
+	//b.sizeofimageå¤§å°
+	optional_header->SizeOfImage += 0x1000;				//è¿™ä¸ªå¤§å°å¯ä»¥æ˜¯section_size
 	DWORD writeSize = 0;
 	WriteFile(hFile, buf, size, &writeSize, NULL);
 	OVERLAPPED ol = { 0 };
-	//ÉèÖÃÎÄ¼şÆ«ÒÆÎªÎÄ¼şÄ©Î²
+	//è®¾ç½®æ–‡ä»¶åç§»ä¸ºæ–‡ä»¶æœ«å°¾
 	ol.Offset = size;
 	char temp[0x1000] = { 0 };
 	WriteFile(hFile, temp, 0x1000, &writeSize, &ol);
@@ -133,12 +133,12 @@ DWORD AddSection2(LPVOID buf, DWORD size, HANDLE hFile, PCHAR section_name, DWOR
 }
 
 
-int _tmain(char* argv, char* args[]) {
+int _tmain(char argc, char* argv[]) {
 
 	setlocale(LC_ALL, NULL);
 	CHAR szName[10] = { 0 };
-	//²ÎÊı1---Çø¶ÎÃû
-	//²ÎÊı2---ĞÂÔö½Ú´óĞ¡
+	//å‚æ•°1---åŒºæ®µå
+	//å‚æ•°2---æ–°å¢èŠ‚å¤§å°
 	AddSection(szName, 0x1000);
 
 	return 0;
