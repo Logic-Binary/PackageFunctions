@@ -1,31 +1,31 @@
 #include<Windows.h>
 #include<tchar.h>
 #include<iostream>
-#define path1 L"C:\\Users\\ÂŞ¼­\\Desktop\\Dll1.dll"
-#define path2 L"C:\\Users\\ÂŞ¼­\\Desktop\\REL_EXP.dll"
+#define path1 L"C:\\Users\\ç½—è¾‘\\Desktop\\Dll1.dll"
+#define path2 L"C:\\Users\\ç½—è¾‘\\Desktop\\REL_EXP.dll"
 
 //*********************************************************************
-//Çø¶Î¶ÔÆë ²ÎÊı1µØÖ· ²ÎÊı2¶ÔÆëÁ£¶È
+//åŒºæ®µå¯¹é½ å‚æ•°1åœ°å€ å‚æ•°2å¯¹é½ç²’åº¦
 DWORD align(DWORD address, DWORD ratio);
 //*********************************************************************
 
 //*********************************************************************
-//ĞÂÔöÒ»¸ö½Ú ²ÎÊı1Ô´ÎÄ¼ş¾ä±ú ²ÎÊı2Ä¿±êÎÄ¼ş¾ä±ú
+//æ–°å¢ä¸€ä¸ªèŠ‚ å‚æ•°1æºæ–‡ä»¶å¥æŸ„ å‚æ•°2ç›®æ ‡æ–‡ä»¶å¥æŸ„
 BOOL AddSection(HANDLE hSrcFile1, HANDLE hDstFile2);
 //*********************************************************************
 
 //*********************************************************************
-//RVA×ªFOA ²ÎÊı1»ùÖ·£¬²ÎÊı¶şRVA
+//RVAè½¬FOA å‚æ•°1åŸºå€ï¼Œå‚æ•°äºŒRVA
 DWORD RVA2FOA(LPVOID buf, LPVOID RVA);
 //*********************************************************************
 
 //*********************************************************************
-//ÒÆ¶¯¸´ÖÆµ¼³ö±í ²ÎÊı1Ä¿±êÎÄ¼ş¾ä±ú ·µ»ØÖµÊÇĞÂÔöµÄ×Ö½ÚÊı
+//ç§»åŠ¨å¤åˆ¶å¯¼å‡ºè¡¨ å‚æ•°1ç›®æ ‡æ–‡ä»¶å¥æŸ„ è¿”å›å€¼æ˜¯æ–°å¢çš„å­—èŠ‚æ•°
 DWORD MoveEXPORT(HANDLE hFile);
 //*********************************************************************
 
 //**************************************************************************
-//ÒÆ¶¯¸´ÖÆÖØ¶¨Î»±í ²ÎÊı1Ä¿±êÎÄ¼ş¾ä±ú ²ÎÊı2ÔÚĞÂ½ÚÖĞµÄÆ«ÒÆÎ»ÖÃ ·µ»ØÖµÊÇĞÂÔöµÄ×Ö½ÚÊı
+//ç§»åŠ¨å¤åˆ¶é‡å®šä½è¡¨ å‚æ•°1ç›®æ ‡æ–‡ä»¶å¥æŸ„ å‚æ•°2åœ¨æ–°èŠ‚ä¸­çš„åç§»ä½ç½® è¿”å›å€¼æ˜¯æ–°å¢çš„å­—èŠ‚æ•°
 DWORD MoveReloc(HANDLE hFile,DWORD offset);
 //**************************************************************************
 
@@ -58,47 +58,47 @@ BOOL AddSection(HANDLE hSrcFile1, HANDLE hDstFile2) {
 	PIMAGE_FILE_HEADER file_header = PIMAGE_FILE_HEADER(&(nt_header->FileHeader));
 	PIMAGE_SECTION_HEADER section_header = PIMAGE_SECTION_HEADER(IMAGE_FIRST_SECTION(nt_header));
 
-	//ÕâÀïÖ±½Ó¿¼ÂÇ¸´ÔÓÇé¿ö£¬Çø¶ÎºóµÄÄÚÈİ²»¿ÉĞŞ¸Ä£¬½«dos_stubÒÆ³ı£¬PEÍ·²¿ÕûÌåÇ°ÒÆ
-	//¼ÆËãdos_stubµÄ´óĞ¡
+	//è¿™é‡Œç›´æ¥è€ƒè™‘å¤æ‚æƒ…å†µï¼ŒåŒºæ®µåçš„å†…å®¹ä¸å¯ä¿®æ”¹ï¼Œå°†dos_stubç§»é™¤ï¼ŒPEå¤´éƒ¨æ•´ä½“å‰ç§»
+	//è®¡ç®—dos_stubçš„å¤§å°
 	DWORD dos_stub_size = dos_header->e_lfanew - sizeof(dos_header);
-	//¼ÆËãntÖÁ×îºóÒ»¸ösectionµÄ´óĞ¡
+	//è®¡ç®—ntè‡³æœ€åä¸€ä¸ªsectionçš„å¤§å°
 	DWORD all_header_size = sizeof(IMAGE_NT_HEADERS) + file_header->NumberOfSections * 0x28;
 	memcpy(LPVOID((DWORD)buf + sizeof(IMAGE_DOS_HEADER)), nt_header, all_header_size);
 	memset(LPVOID((DWORD)buf + sizeof(IMAGE_DOS_HEADER) + all_header_size), 0, dos_stub_size);
-	//ÖØĞÂ»ñÈ¡¸÷¸ö½ÚµãÖµ
+	//é‡æ–°è·å–å„ä¸ªèŠ‚ç‚¹å€¼
 	dos_header->e_lfanew = sizeof(IMAGE_DOS_HEADER);
 	nt_header = PIMAGE_NT_HEADERS(dos_header->e_lfanew + (DWORD)buf);
 	option_header = PIMAGE_OPTIONAL_HEADER(&(nt_header->OptionalHeader));
 	file_header = PIMAGE_FILE_HEADER(&(nt_header->FileHeader));
 	section_header = PIMAGE_SECTION_HEADER(IMAGE_FIRST_SECTION(nt_header));
-	//ĞŞ¸Ä¼¸¸ö¹ØÓÚÇø¶ÎµÄÖµ
+	//ä¿®æ”¹å‡ ä¸ªå…³äºåŒºæ®µçš„å€¼
 	file_header->NumberOfSections += 1;
 	option_header->SizeOfHeaders += 0x28;
-	//¹¹ÔìÒ»¸öÇø¶ÎÊôĞÔ
+	//æ„é€ ä¸€ä¸ªåŒºæ®µå±æ€§
 	BYTE name[8] = "NewSec";
 	IMAGE_SECTION_HEADER newsec = { 0 };
-	//Çø¶ÎÃû
+	//åŒºæ®µå
 	memcpy(newsec.Name, name, 8);
-	//Çø¶ÎÔÚÎÄ¼şÖĞ´óĞ¡(¶ÔÆëÇ°)
+	//åŒºæ®µåœ¨æ–‡ä»¶ä¸­å¤§å°(å¯¹é½å‰)
 	newsec.Misc.VirtualSize = 0x1000;
-	//Çø¶ÎRVA  ×îºóÒ»¸öÇø¶ÎµÄRVA+Çø¶ÎÔÚÎÄ¼şÖĞµÄ´óĞ¡ÔÙ¶ÔÆë
+	//åŒºæ®µRVA  æœ€åä¸€ä¸ªåŒºæ®µçš„RVA+åŒºæ®µåœ¨æ–‡ä»¶ä¸­çš„å¤§å°å†å¯¹é½
 	section_header += (file_header->NumberOfSections - 2);
 	newsec.VirtualAddress = align(section_header->VirtualAddress + section_header->SizeOfRawData, option_header->SectionAlignment);
-	//Çø¶ÎÔÚÎÄ¼şÖĞ´óĞ¡
+	//åŒºæ®µåœ¨æ–‡ä»¶ä¸­å¤§å°
 	newsec.SizeOfRawData = 0x1000;
-	//Çø¶ÎFOA ×îºóÒ»¸öÇø¶ÎµÄFOA+Çø¶ÎÔÚÎÄ¼şÖĞ´óĞ¡ÔÙ¶ÔÆë
+	//åŒºæ®µFOA æœ€åä¸€ä¸ªåŒºæ®µçš„FOA+åŒºæ®µåœ¨æ–‡ä»¶ä¸­å¤§å°å†å¯¹é½
 	newsec.PointerToRawData = align(section_header->PointerToRawData + section_header->SizeOfRawData, option_header->FileAlignment);
-	//ÊôĞÔÓëÖØ¶¨Î»½ÚµÄÊôĞÔÏàÍ¬
+	//å±æ€§ä¸é‡å®šä½èŠ‚çš„å±æ€§ç›¸åŒ
 	newsec.Characteristics = section_header->Characteristics;
-	//ÔÚbufÖĞÌí¼Ó
+	//åœ¨bufä¸­æ·»åŠ 
 	memcpy(LPVOID((DWORD)buf + sizeof(IMAGE_DOS_HEADER) + all_header_size), &newsec, 0x28);
 
-	//Ğ´ÈëÎÄ¼ş
+	//å†™å…¥æ–‡ä»¶
 	DWORD writeSize = 0;
 	WriteFile(hDstFile2, buf, size, &writeSize, NULL);
 	char temp[0x1000] = { 0 };
 	WriteFile(hDstFile2, temp, 0x1000, &writeSize, NULL);
-	//ÊÍ·Å¿Õ¼ä
+	//é‡Šæ”¾ç©ºé—´
 	if (buf != NULL) {
 		delete[] buf;
 		buf = NULL;
@@ -142,86 +142,86 @@ DWORD MoveEXPORT(HANDLE hFile) {
 	PIMAGE_SECTION_HEADER section_header = PIMAGE_SECTION_HEADER(IMAGE_FIRST_SECTION(nt_header));
 
 	section_header += (file_header->NumberOfSections - 1);
-	//ĞÂ½ÚÔÚÎÄ¼şÖĞµÄÎ»ÖÃ
+	//æ–°èŠ‚åœ¨æ–‡ä»¶ä¸­çš„ä½ç½®
 	DWORD newSectionFOA = section_header->PointerToRawData;
-	//ÕÒµ½Ô­ÏÈµ¼³ö±íµÄÎ»ÖÃ£¬ÏÈÔ­·â²»¶¯µÄ¿½±´ÈëĞÂ½Ú¿ªÍ·Î»ÖÃ
+	//æ‰¾åˆ°åŸå…ˆå¯¼å‡ºè¡¨çš„ä½ç½®ï¼Œå…ˆåŸå°ä¸åŠ¨çš„æ‹·è´å…¥æ–°èŠ‚å¼€å¤´ä½ç½®
 	PIMAGE_EXPORT_DIRECTORY export_table = PIMAGE_EXPORT_DIRECTORY(RVA2FOA(buf, LPVOID(option_header->DataDirectory[0].VirtualAddress)) + (DWORD)buf);
 	DWORD newSectionVA = (DWORD)buf + newSectionFOA;
 	memcpy(LPVOID(newSectionVA), export_table, sizeof(IMAGE_EXPORT_DIRECTORY));
 	export_table = (PIMAGE_EXPORT_DIRECTORY)newSectionVA;
 
-	//µÚÒ»´ÎµÄ¿½±´µØÖ·
+	//ç¬¬ä¸€æ¬¡çš„æ‹·è´åœ°å€
 	DWORD CopyAddress = newSectionFOA + sizeof(IMAGE_EXPORT_DIRECTORY) + (DWORD)buf;
-	//¼ÇÂ¼µØÖ·£¬·½±ã¼ÆËã¿½±´µÄ×Ü´óĞ¡
+	//è®°å½•åœ°å€ï¼Œæ–¹ä¾¿è®¡ç®—æ‹·è´çš„æ€»å¤§å°
 	DWORD TempAddress = CopyAddress;
 
 	//----------------------------------------------------------------------------------------------
-	//ÏÈ¿½±´PEÃû
+	//å…ˆæ‹·è´PEå
 	DWORD len = strlen(PCHAR(RVA2FOA(buf, LPVOID(export_table->Name)) + (DWORD)buf));
 	memcpy(LPVOID(CopyAddress), PCHAR(RVA2FOA(buf, LPVOID(export_table->Name)) + (DWORD)buf), len + 1);
-	//PEÎÄ¼şÃûRVA
+	//PEæ–‡ä»¶åRVA
 	DWORD PENameRVA = section_header->VirtualAddress + sizeof(IMAGE_EXPORT_DIRECTORY);
-	//RVAĞ´µ½ĞÂ½ÚµÄµ¼³ö±íÖĞ
+	//RVAå†™åˆ°æ–°èŠ‚çš„å¯¼å‡ºè¡¨ä¸­
 	export_table->Name = PENameRVA;
-	//ÄÚÈİ³¤¶È
+	//å†…å®¹é•¿åº¦
 	DWORD Size_PEName = len + 1;
 	//-----------------------------------------------------------------------------------------------
 
 	//-----------------------------------------------------------------------------------------------
-	//¿½±´º¯ÊıµØÖ·±í
-	//µØÖ·±íRVA = ÎÄ¼şÃûRVA+ÎÄ¼şÃû³¤¶È+1(×Ö·û´®ÒÔ0½áÎ²)
+	//æ‹·è´å‡½æ•°åœ°å€è¡¨
+	//åœ°å€è¡¨RVA = æ–‡ä»¶åRVA+æ–‡ä»¶åé•¿åº¦+1(å­—ç¬¦ä¸²ä»¥0ç»“å°¾)
 	DWORD FunAddressRVA = PENameRVA + Size_PEName;
 	CopyAddress += Size_PEName;
 	DWORD OldFunAddressTable = RVA2FOA(buf, LPVOID(export_table->AddressOfFunctions)) + DWORD(buf);
-	//Ñ­»·¿½±´º¯ÊıµØÖ·
+	//å¾ªç¯æ‹·è´å‡½æ•°åœ°å€
 	for (DWORD i = 0; i < export_table->NumberOfFunctions; i++) {
 		memcpy(LPVOID(CopyAddress), LPVOID(OldFunAddressTable), 4);
 		CopyAddress += 4;
 		OldFunAddressTable += 4;
 	}
-	//RVAĞ´µ½ĞÂ½ÚµÄº¯ÊıµØÖ·±íÖĞ
+	//RVAå†™åˆ°æ–°èŠ‚çš„å‡½æ•°åœ°å€è¡¨ä¸­
 	export_table->AddressOfFunctions = FunAddressRVA;
-	//Ğ´ÈëµÄ³¤¶È
+	//å†™å…¥çš„é•¿åº¦
 	DWORD Size_FunAddress = export_table->NumberOfFunctions * 4;
 	//-----------------------------------------------------------------------------------------------
 
 	//-----------------------------------------------------------------------------------------------
-	//º¯ÊıÃû³Æ±íµÄ¿½±´
-	//Ãû³Æ±íRVA = µØÖ·±íRVA+º¯ÊıµØÖ·±í³¤¶È
+	//å‡½æ•°åç§°è¡¨çš„æ‹·è´
+	//åç§°è¡¨RVA = åœ°å€è¡¨RVA+å‡½æ•°åœ°å€è¡¨é•¿åº¦
 	DWORD FunNamesRVA = FunAddressRVA + Size_FunAddress;
-	//1.È·¶¨RVAÃû³Æ±íµÄ³¤¶È
+	//1.ç¡®å®šRVAåç§°è¡¨çš„é•¿åº¦
 	DWORD Size_FunNameRVA = export_table->NumberOfNames * 4;
-	//2.È·¶¨º¯ÊıÃûµÚÒ»¸öµÄ¿ªÊ¼Î»ÖÃ
+	//2.ç¡®å®šå‡½æ•°åç¬¬ä¸€ä¸ªçš„å¼€å§‹ä½ç½®
 	DWORD FirstFunNameAdd = CopyAddress + Size_FunNameRVA;
-	//Ñ­»·¿½±´(Ë³´ø¼ÇÂ¼×Ü³¤¶È)
+	//å¾ªç¯æ‹·è´(é¡ºå¸¦è®°å½•æ€»é•¿åº¦)
 	DWORD AllNameLen = 0;
 	DWORD NameLen = 0;
 	DWORD OldNameRVATable = RVA2FOA(buf, LPVOID(export_table->AddressOfNames)) + (DWORD)buf;
-	//º¯ÊıÃûRVA
+	//å‡½æ•°åRVA
 	DWORD TempNameRVA = FunNamesRVA + Size_FunNameRVA;
 	for (DWORD i = 0; i < export_table->NumberOfNames; i++) {
 		LPVOID oldName = (LPVOID)(RVA2FOA(buf, (LPVOID)((PDWORD)OldNameRVATable)[i]) + (DWORD)buf);
 		NameLen = strlen((PCHAR)oldName) + 1;
-		//½«Ãû³Æ¿½±´µ½ĞÂµÄµØÖ·ÉÏ
+		//å°†åç§°æ‹·è´åˆ°æ–°çš„åœ°å€ä¸Š
 		memcpy((LPVOID)FirstFunNameAdd, (LPVOID)oldName, NameLen);
 		FirstFunNameAdd += NameLen;
-		//½«ĞÂÃû³ÆµØÖ·µÄRVA¸³¸øĞÂÃû³ÆRVA±í
+		//å°†æ–°åç§°åœ°å€çš„RVAèµ‹ç»™æ–°åç§°RVAè¡¨
 		*(PDWORD)CopyAddress = TempNameRVA;
 		CopyAddress += 4;
 		TempNameRVA += NameLen;
-		//¼ÆËã×Ü³¤¶È
+		//è®¡ç®—æ€»é•¿åº¦
 		AllNameLen += NameLen;
 	}
-	//RVAĞ´µ½ĞÂ½ÚµÄº¯ÊıµØÖ·±íÖĞ
+	//RVAå†™åˆ°æ–°èŠ‚çš„å‡½æ•°åœ°å€è¡¨ä¸­
 	export_table->AddressOfNames = FunNamesRVA;
-	//Ğ´ÈëµÄ³¤¶È
+	//å†™å…¥çš„é•¿åº¦
 	DWORD Size_AllFunTable = Size_FunNameRVA + AllNameLen;
-	//´ËÊ±µÈ´ı¿½±´µÄµØÖ·
+	//æ­¤æ—¶ç­‰å¾…æ‹·è´çš„åœ°å€
 	CopyAddress += AllNameLen;
 	//-----------------------------------------------------------------------------------------------
 
 	//-----------------------------------------------------------------------------------------------
-	//¿½±´ĞòºÅ±í
+	//æ‹·è´åºå·è¡¨
 	DWORD OrdinalsRVA = FunNamesRVA + Size_AllFunTable;
 	DWORD OrdinalTable = RVA2FOA((LPVOID)buf, LPVOID(export_table->AddressOfNameOrdinals)) + (DWORD)buf;
 	for (DWORD i = 0; i < export_table->NumberOfNames; i++) {
@@ -229,22 +229,22 @@ DWORD MoveEXPORT(HANDLE hFile) {
 		*PWORD(CopyAddress) = Ordinal;
 		CopyAddress += 2;
 	}
-	//RVAĞ´µ½ĞÂ½ÚµÄº¯ÊıµØÖ·±íÖĞ
+	//RVAå†™åˆ°æ–°èŠ‚çš„å‡½æ•°åœ°å€è¡¨ä¸­
 	export_table->AddressOfNameOrdinals = OrdinalsRVA;
 	//-----------------------------------------------------------------------------------------------
 
-	//Ô­ÏÈµ¼³ö±íµÄRVAĞèÒª¸ü¸Ä
+	//åŸå…ˆå¯¼å‡ºè¡¨çš„RVAéœ€è¦æ›´æ”¹
 	option_header = PIMAGE_OPTIONAL_HEADER(&(nt_header->OptionalHeader));
 	PIMAGE_DATA_DIRECTORY data_dir = (PIMAGE_DATA_DIRECTORY)&(option_header->DataDirectory[0]);
 	ol.Offset = (DWORD)data_dir - (DWORD)buf;
 	DWORD writeSize = 0;
 	WriteFile(hFile, &(section_header->VirtualAddress), 4, &writeSize, &ol);
 
-	//×Ü³¤¶È 
+	//æ€»é•¿åº¦ 
 	DWORD ALLSize = CopyAddress - TempAddress + sizeof(IMAGE_EXPORT_DIRECTORY);
 	ol.Offset = newSectionFOA;
 	writeSize = 0;
-	//Ğ´ÈëÎÄ¼ş
+	//å†™å…¥æ–‡ä»¶
 	WriteFile(hFile, (LPVOID)((DWORD)buf + newSectionFOA), ALLSize,&writeSize,&ol);
 	if (buf != NULL) {
 		delete[] buf;
@@ -273,18 +273,18 @@ DWORD MoveReloc(HANDLE hFile, DWORD offset) {
 	section_header += file_header->NumberOfSections - 1;
 	PIMAGE_BASE_RELOCATION reloc = PIMAGE_BASE_RELOCATION(RVA2FOA(buf, LPVOID(option_header->DataDirectory[5].VirtualAddress)) + (DWORD)buf);
 	DWORD AllSize = 0;
-	//ÕâÀïÊÇ¿½±´µã
+	//è¿™é‡Œæ˜¯æ‹·è´ç‚¹
 	DWORD CopyAddress = section_header->PointerToRawData + offset + (DWORD)buf;
 	while ((reloc->SizeOfBlock)&&(reloc->VirtualAddress)) {
 		memcpy((LPVOID)CopyAddress,reloc, reloc->SizeOfBlock);
-		//ÏÂÒ»¸ö¿½±´µã
+		//ä¸‹ä¸€ä¸ªæ‹·è´ç‚¹
 		CopyAddress += reloc->SizeOfBlock;
-		//ÖØ¶¨Î»±íµÄ´óĞ¡
+		//é‡å®šä½è¡¨çš„å¤§å°
 		AllSize += reloc->SizeOfBlock;
-		//ÏÂÒ»¸öÖØ¶¨Î»±í
+		//ä¸‹ä¸€ä¸ªé‡å®šä½è¡¨
 		reloc = PIMAGE_BASE_RELOCATION((DWORD)reloc + reloc->SizeOfBlock);
 	}
-	//½«Ô­ÏÈµÄÖØ¶¨Î»µØÖ·¸ü»»
+	//å°†åŸå…ˆçš„é‡å®šä½åœ°å€æ›´æ¢
 	PIMAGE_DATA_DIRECTORY data = (PIMAGE_DATA_DIRECTORY)&(option_header->DataDirectory[5]);
 
 	data->VirtualAddress = section_header->VirtualAddress + offset;
@@ -292,25 +292,25 @@ DWORD MoveReloc(HANDLE hFile, DWORD offset) {
 	DWORD writeSize = 0;
 	WriteFile(hFile, &(data->VirtualAddress), 4, &writeSize, &ol);
 
-	//½«ÖØ¶¨Î»±íµÄĞÅÏ¢Ğ´ÈëĞÂ½ÚÖĞ
+	//å°†é‡å®šä½è¡¨çš„ä¿¡æ¯å†™å…¥æ–°èŠ‚ä¸­
 	ol.Offset = section_header->PointerToRawData + offset;
 	WriteFile(hFile, LPVOID((DWORD)buf + ol.Offset), AllSize, &writeSize, &ol);
 
-	//²¹8¸ö0
+	//è¡¥8ä¸ª0
 	return AllSize+8;
 	
 }
 
-int _tmain(char* argv, char* args[]) {
+int _tmain(char argc, char* argv[]) {
 
 	HANDLE hFile1 = CreateFile(path1, GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	HANDLE hFile2 = CreateFile(path2, GENERIC_READ | GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	//ĞÂÔöÒ»¸ö½Ú
+	//æ–°å¢ä¸€ä¸ªèŠ‚
 	AddSection(hFile1, hFile2);
-	//ÒÆ¶¯µ¼³ö±íĞÅÏ¢ÖÁĞÂµÄ½ÚÖĞ
+	//ç§»åŠ¨å¯¼å‡ºè¡¨ä¿¡æ¯è‡³æ–°çš„èŠ‚ä¸­
 	DWORD size = MoveEXPORT(hFile2);
-	//ÒÆ¶¯ÖØ¶¨Î»±íÖÁĞÂµÄ½ÚÖĞ
+	//ç§»åŠ¨é‡å®šä½è¡¨è‡³æ–°çš„èŠ‚ä¸­
 	size += MoveReloc(hFile2, size);
 
 
