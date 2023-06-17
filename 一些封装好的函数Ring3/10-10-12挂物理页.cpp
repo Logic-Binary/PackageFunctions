@@ -8,18 +8,18 @@ DWORD pde = 0, pte = 0, pde0 = 0, pte0 = 0;
 DWORD flag = 0;
 
 void __declspec(naked) fun1() {
-	//¹Û²ì¶ÑÕ»±ä»¯
+	//è§‚å¯Ÿå †æ ˆå˜åŒ–
 	__asm {
 
-		//ÅÐ¶Ï0µÄPDEÊÇ·ñÎª0
+		//åˆ¤æ–­0çš„PDEæ˜¯å¦ä¸º0
 		mov eax, pde0;
 		mov eax, [eax];
 		test eax, eax;
 		je end;
-		//ÄÃ³öbufµÄPTE
+		//æ‹¿å‡ºbufçš„PTE
 		mov eax, pte;
 		mov eax, [eax];
-		//ÐÞ¸Ä0µÄPTE
+		//ä¿®æ”¹0çš„PTE
 		mov ebx, pte0;
 		mov dword ptr ds:[ebx], eax;
 
@@ -34,16 +34,16 @@ void __declspec(naked) fun1() {
 }
 
 
-//¸ø0¹ÒÎïÀíÒ³
+//ç»™0æŒ‚ç‰©ç†é¡µ
 void physicalAddress() {
 	LPVOID buf = VirtualAlloc(NULL, 4, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
 	*(PDWORD)buf = 10;
 	printf("%p\n", buf);
-	//¼ÆËãbufµÄPDEÓëPTE(¶¼ÊÇµØÖ·£¬ÌáÈ¨ºó½â³öÀ´²ÅÊÇÕæÕýµÄÖµ)
+	//è®¡ç®—bufçš„PDEä¸ŽPTE(éƒ½æ˜¯åœ°å€ï¼ŒææƒåŽè§£å‡ºæ¥æ‰æ˜¯çœŸæ­£çš„å€¼)
 	pde = (DWORD)((((DWORD)buf >> 20) & 0xFFC) - 0x3FD00000);
 	pte = (DWORD)((((DWORD)buf >> 10) & 0x3FFFFC) - 0x40000000);
 
-	//¼ÆËã0µÄPDEÓëPTE(µØÖ·£¬ÌáÈ¨ºó½â³öÀ´²ÅÊÇÕæÕýµÄÖµ)
+	//è®¡ç®—0çš„PDEä¸ŽPTE(åœ°å€ï¼ŒææƒåŽè§£å‡ºæ¥æ‰æ˜¯çœŸæ­£çš„å€¼)
 	pde0 = 0xC0300000;
 	pte0 = 0xC0000000;
 
@@ -54,19 +54,19 @@ void physicalAddress() {
 int _tmain(char argc, char* argv[]) {
 
 	//fun1();		//0x0041122b
-	//¹¹½¨µ÷ÓÃÃÅÔÚDGT±íÏÂ±êÎª9µÄµØ·½ 
-	//0041EC00  0018   1212  Í¬¼¶
-	//		 3»·´úÂë¶Î
+	//æž„å»ºè°ƒç”¨é—¨åœ¨DGTè¡¨ä¸‹æ ‡ä¸º9çš„åœ°æ–¹ 
+	//0041EC00  0018   1212  åŒçº§
+	//		 3çŽ¯ä»£ç æ®µ
 
-	//ÎÞ²Î
+	//æ— å‚
 	/*__asm{
 		int 3;
 		call fword ptr ds:[buf1];
 	}*/
 
-	//ÓÐ²Î
-	//¹¹½¨µ÷ÓÃÃÅ        
-	//eq 80b95048 0041EC000008122b     Ô½¼¶
+	//æœ‰å‚
+	//æž„å»ºè°ƒç”¨é—¨        
+	//eq 80b95048 0041EC000008122b     è¶Šçº§
 
 
 	physicalAddress();
